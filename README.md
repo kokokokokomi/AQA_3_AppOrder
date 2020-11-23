@@ -1,0 +1,1 @@
+**AppOrder Test** [![Build status](https://ci.appveyor.com/api/projects/status/60llr62kdlwtg6fq?svg=true)](https://ci.appveyor.com/project/komisuomi/aqa-3-apporder)
