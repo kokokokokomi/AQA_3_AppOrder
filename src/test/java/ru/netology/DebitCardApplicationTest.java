@@ -1,16 +1,18 @@
 package ru.netology;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class DebitCardApplicationTest {
 
+    @BeforeEach
+    void shouldOpenBrowser() { open("http://localhost:9999"); }
+
     @Test
     void shouldConfirmRequest() {
-        open("http://localhost:9999");
-        $("[data-test-id='name'] input").setValue("Шамиль Газизов");
+        $("[data-test-id=name] input").setValue("Шамиль Газизов");
         $("[data-test-id=phone] input").setValue("+79005553535");
         $("[data-test-id=agreement]").click();
         $("button").click();
@@ -19,31 +21,28 @@ public class DebitCardApplicationTest {
 
     @Test
     void shouldNotConfirmRequestIfIncorrectName() {
-        open("http://localhost:9999");
         $("[data-test-id=name] input").setValue("Shamil Gazizov");
         $("[data-test-id=phone] input").setValue("+79005553535");
         $("[data-test-id=agreement]").click();
         $("button").click();
-        $(".input__sub").shouldHave(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
+        $("[data-test-id=name] .input__sub").shouldHave(exactText("Фамилия и имя указаны неверно. Допустимы только русские буквы, пробелы и дефисы."));
     }
 
     @Test
     void shouldNotConfirmRequestIfIncorrectPhone() {
-        open("http://localhost:9999");
         $("[data-test-id=name] input").setValue("Сергей Иванов");
-        $("[data-test-id=phone] input").setValue("9042222222");
+        $("[data-test-id=phone] input").setValue("+79042222222");
         $("[data-test-id=agreement]").click();
         $("button").click();
-        $(".input__sub").shouldHave(exactText("Укажите точно как в паспорте"));
+        $("[data-test-id=phone] .input__sub").shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
 
     @Test
-    void shouldNotConfirmRequestIfIncorrectAll() {
-        open("http://localhost:9999");
-        $("[data-test-id=name] input").setValue("Sergey Ivanov");
-        $("[data-test-id=phone] input").setValue("9042222222");
+    void shouldNotConfirmRequestIfNotSetCheckbox() {
+        $("[data-test-id=name] input").setValue("Шамиль Газизов");
+        $("[data-test-id=phone] input").setValue("+79005553535");
         $("[data-test-id=agreement]").exists();
         $("button").click();
-        $(".input__sub").shouldHave(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
+        $("[data-test-id=agreement]").shouldNotHave(exactText("checkbox_checked"));
     }
 }
