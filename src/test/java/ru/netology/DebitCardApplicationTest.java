@@ -25,16 +25,16 @@ public class DebitCardApplicationTest {
         $("[data-test-id=phone] input").setValue("+79005553535");
         $("[data-test-id=agreement]").click();
         $("button").click();
-        $("[data-test-id=name] .input__sub").shouldHave(exactText("Фамилия и имя указаны неверно. Допустимы только русские буквы, пробелы и дефисы."));
+        $("[data-test-id=name].input_invalid .input__sub").shouldHave(exactText("Фамилия и имя указаны неверно. Допустимы только русские буквы, пробелы и дефисы."));
     }
 
     @Test
     void shouldNotConfirmRequestIfIncorrectPhone() {
         $("[data-test-id=name] input").setValue("Сергей Иванов");
-        $("[data-test-id=phone] input").setValue("+79042222222");
+        $("[data-test-id=phone] input").setValue("+7904222222");
         $("[data-test-id=agreement]").click();
         $("button").click();
-        $("[data-test-id=phone] .input__sub").shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
+        $("[data-test-id=phone].input_invalid .input__sub").shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
 
     @Test
@@ -43,6 +43,6 @@ public class DebitCardApplicationTest {
         $("[data-test-id=phone] input").setValue("+79005553535");
         $("[data-test-id=agreement]").exists();
         $("button").click();
-        $("[data-test-id=agreement]").shouldNotHave(exactText("checkbox_checked"));
+        $("[data-test-id=agreement].input_invalid .checkbox__text").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй"));
     }
 }
